@@ -1,23 +1,555 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Home</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <!--
-      Need a visual blank slate?
-      Remove all code in `styles.css`!
-    -->
-    <link rel="stylesheet" href="styles.css" />
-    <script type="module" src="script.js"></script>
-  </head>
-  <body>
-    <nav>
-      <a href="/" aria-current="page">Home</a>
-      <a href="/page2.html">Other page</a>
-    </nav>
-    <main>
-      <h1>Home page</h1>
-    </main>
-  </body>
+<html lang="ar" dir="rtl" data-theme="system">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>مدونة الاتصالات والحياة</title>
+  <meta name="description" content="مدونة عربية تهتم بتقنيات الاتصالات والحياة الرقمية ونصائح الأمان، مع صفحات الشروط والأحكام وسياسة الخصوصية." />
+  <link rel="canonical" href="https://example.com/" />
+  <meta name="color-scheme" content="light dark" />
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="مدونة الاتصالات والحياة" />
+  <meta property="og:description" content="أحدث المقالات في تكنولوجيا الاتصالات والحياة الرقمية." />
+  <meta property="og:type" content="website" />
+  
+  <meta property="og:image" content="/pexels-padrinan-579471.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <style>
+    /* ====== أساسيات التصميم ====== */
+    :root {
+      --bg: #ffffff;
+      --text: #0f172a; /* slate-900 */
+      --muted: #475569; /* slate-600 */
+      --soft: #e2e8f0; /* slate-200 */
+      --card: #ffffff;
+      --accent: #0ea5e9; /* sky-500 */
+      --accent-2: #22c55e; /* green-500 */
+      --warning: #f59e0b; /* amber-500 */
+      --danger: #ef4444; /* red-500 */
+      --shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
+      --radius: 16px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1220;
+        --text: #f8fafc;
+        --muted: #94a3b8;
+        --soft: #1e293b;
+        --card: #0f172a;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      }
+    }
+    html[data-theme="light"] { color-scheme: light; }
+    html[data-theme="light"] :root { --bg:#ffffff; --text:#0f172a; --muted:#475569; --soft:#e2e8f0; --card:#ffffff; }
+    html[data-theme="dark"] { color-scheme: dark; }
+    html[data-theme="dark"] :root { --bg:#0b1220; --text:#f8fafc; --muted:#94a3b8; --soft:#1e293b; --card:#0f172a; }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Naskh Arabic UI", Tahoma, Arial, sans-serif;
+      background: var(--bg); color: var(--text);
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; height: auto; display: block; }
+    .container { width: min(1200px, 94%); margin-inline: auto; }
+    .grid { display: grid; gap: 1rem; }
+    .btn { display: inline-flex; align-items: center; gap:.5rem; padding:.7rem 1rem; border-radius: 999px; background: var(--text); color: var(--bg); box-shadow: var(--shadow); border: 1px solid transparent; }
+    .btn:hover { filter: brightness(1.05); }
+    .btn.ghost { background: transparent; color: var(--text); border-color: var(--soft); }
+    .badge { display:inline-flex; align-items:center; gap:.4rem; font-size:.8rem; padding:.25rem .6rem; border-radius:999px; background:var(--soft); color:var(--muted); }
+    .card { background: var(--card); border:1px solid var(--soft); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+    .muted { color: var(--muted); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .skip-link { position:absolute; inset-inline-start: 1rem; inset-block-start: -40px; background: var(--text); color: var(--bg); padding:.5rem 1rem; border-radius: 8px; z-index: 1000; }
+    .skip-link:focus { inset-block-start: 1rem; }
+
+    /* ====== رأس الصفحة ====== */
+    header {
+      position: sticky; top: 0; backdrop-filter: blur(8px); background: color-mix(in oklab, var(--bg) 70%, transparent); border-bottom: 1px solid var(--soft); z-index: 50;
+    }
+    .nav { display:flex; align-items:center; justify-content:space-between; padding: .8rem 0; }
+    .brand { display:flex; align-items:center; gap:.7rem; font-weight:700; }
+    .brand svg { inline-size:28px; block-size:28px; }
+    nav ul { display:flex; align-items:center; gap:.6rem; list-style:none; margin:0; padding:0; }
+    nav a { padding:.5rem .8rem; border-radius: 10px; }
+    nav a:hover, nav a[aria-current="page"] { background: var(--soft); }
+
+    .theme-toggle { border:1px solid var(--soft); background:var(--card); color:var(--text); border-radius:999px; padding:.5rem .75rem; }
+
+    .menu-btn { display:none; }
+    @media (max-width: 820px) {
+      nav ul { display:none; }
+      .menu-btn { display:inline-flex; align-items:center; gap:.4rem; }
+      .mobile-nav { display:none; border-top:1px solid var(--soft); padding:.5rem 0; }
+      .mobile-nav.open { display:block; }
+      .mobile-nav a { display:block; padding:.7rem .5rem; border-radius:10px; }
+      .mobile-nav a:hover { background: var(--soft); }
+    }
+
+    /* ====== Hero ====== */
+    .hero { padding: 3rem 0 2rem; }
+    .hero .wrap { display:grid; grid-template-columns:1.5fr 1fr; gap:2rem; align-items:center; }
+    .hero h1 { font-size: clamp(1.8rem, 2.5vw + 1rem, 3rem); margin: .5rem 0; }
+    .hero p { font-size: 1.1rem; color: var(--muted); }
+    .hero .cta { display:flex; flex-wrap: wrap; gap:.7rem; margin-top:1rem; }
+    @media (max-width:900px){ .hero .wrap{ grid-template-columns:1fr; } }
+
+    /* ====== أقسام ====== */
+    section { padding: 2rem 0; }
+    section h2 { font-size: 1.6rem; margin: 0 0 1rem; }
+
+    /* المقالات */
+    .posts-grid { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 1024px) { .posts-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .posts-grid { grid-template-columns: 1fr; } }
+    .post { display:flex; flex-direction:column; }
+    .post .cover { aspect-ratio: 16/9; background: var(--soft); }
+    .post .content { padding: 1rem; display:flex; flex-direction:column; gap:.5rem; }
+    .post h3 { margin:0; font-size:1.1rem; }
+    .post footer { display:flex; align-items:center; justify-content:space-between; margin-top:.5rem; }
+
+    .toolbar { display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; margin-bottom: 1rem; }
+    .toolbar input[type="search"] { inline-size:min(360px, 100%); padding:.7rem .9rem; border:1px solid var(--soft); background:var(--card); color:var(--text); border-radius: 12px; }
+    .toolbar .filter { display:flex; gap:.4rem; flex-wrap: wrap; }
+    .filter .chip { border:1px solid var(--soft); background:var(--card); color:var(--muted); padding:.4rem .7rem; border-radius:999px; cursor:pointer; }
+    .filter .chip.active { background: var(--text); color: var(--bg); }
+
+    /* حول واتصل */
+    .about .cards { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 900px) { .about .cards { grid-template-columns: 1fr; } }
+    .about .card { padding: 1rem; }
+
+    form { display:grid; gap:.8rem; max-width:560px; }
+    input, textarea { padding:.8rem 1rem; border:1px solid var(--soft); background:var(--card); color:var(--text); border-radius: 12px; }
+    label { font-weight: 600; }
+
+    /* لوحات قانونية */
+    .legal { background: linear-gradient(to bottom, color-mix(in oklab, var(--soft) 35%, transparent), transparent); border-top:1px solid var(--soft); }
+    .legal .panel { padding:1.25rem; }
+    .legal h3 { margin-top:1.5rem; }
+    .legal .note { background: var(--soft); padding:.75rem 1rem; border-radius: 12px; color: var(--muted); }
+
+    /* تذييل + كوكيز */
+    footer { border-top:1px solid var(--soft); padding:1.5rem 0; color: var(--muted); }
+    .footer-grid { display:grid; grid-template-columns: 1fr auto; align-items:center; }
+    @media (max-width: 720px){ .footer-grid { grid-template-columns: 1fr; gap: .8rem; } }
+
+    .cookie { position: fixed; inset-inline: 0; inset-block-end: 0; background: var(--card); border-top:1px solid var(--soft); box-shadow: var(--shadow); padding: .9rem; display: none; z-index: 999; }
+    .cookie .row { display:flex; gap: .8rem; align-items:center; justify-content:space-between; }
+    .cookie p { margin: 0; }
+
+    /* زر لأعلى */
+    #toTop { position: fixed; inset-inline-end: 1rem; inset-block-end: 1rem; display:none; }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
+
+  <!-- ====== رأس الصفحة ====== -->
+  <header>
+    <div class="container nav" role="navigation" aria-label="التنقل">
+      <div class="brand">
+        <!-- أيقونة بسيطة -->
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10.012 10.012 0 0 0 12 2Zm-1 6h2v8h-2ZM7 11h2v5H7Zm8-2h2v7h-2Z"/></svg>
+        <span>الاتصالات والحياة</span>
+      </div>
+
+      <button class="menu-btn btn ghost" id="menuBtn" aria-expanded="false" aria-controls="mobileNav">
+        <span>القائمة</span>
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+      </button>
+
+      <nav>
+        <ul>
+          <li><a href="#home" aria-current="page">الرئيسية</a></li>
+          <li><a href="#articles">المقالات</a></li>
+          <li><a href="#about">عن المدونة</a></li>
+          <li><a href="#contact">اتصل بنا</a></li>
+          <li><a href="#terms">الشروط</a></li>
+          <li><a href="#privacy">الخصوصية</a></li>
+        </ul>
+      </nav>
+
+      <button class="theme-toggle" id="themeToggle" aria-label="تبديل السمة (فاتح/داكن)">
+        <span aria-hidden="true">🌓</span>
+      </button>
+    </div>
+
+    <div id="mobileNav" class="mobile-nav container" role="navigation" aria-label="القائمة الجانبية">
+      <a href="#home">الرئيسية</a>
+      <a href="#articles">المقالات</a>
+      <a href="#about">عن المدونة</a>
+      <a href="#contact">اتصل بنا</a>
+      <a href="#terms">الشروط</a>
+      <a href="#privacy">الخصوصية</a>
+    </div>
+  </header>
+
+  <!-- ====== البطل (Hero) ====== -->
+  <section id="home" class="hero">
+    <div class="container wrap">
+      <div>
+        <span class="badge">مدونة تقنية</span>
+        <h1>مرحبًا بكم في <span style="color:var(--accent)">الاتصالات</span> والحياة</h1>
+        <p>نقدم مقالات وأدلة حول شبكات الاتصالات، الهواتف، الأمان الرقمي، وتأثير التكنولوجيا على حياتنا اليومية.</p>
+        <div class="cta">
+          <a class="btn" href="#articles">استكشف المقالات</a>
+          <a class="btn ghost" href="#newsletter">اشترك بالنشرة</a>
+        </div>
+      </div>
+      <div class="card" aria-hidden="true">
+        <img src="/pexels-padrinan-579471.jpg" class="cover"/>
+      </div>
+    </div>
+  </section>
+
+  <main id="main">
+    <!-- ====== المقالات ====== -->
+    <section id="articles" aria-labelledby="articles-title">
+      <div class="container">
+        <div class="toolbar">
+          <h2 id="articles-title" style="margin:0">المقالات</h2>
+          <input id="search" type="search" placeholder="ابحث في المقالات..." aria-label="بحث" />
+          <div class="filter" role="group" aria-label="تصفية حسب التصنيف">
+            <button class="chip active" data-filter="all">الكل</button>
+            <button class="chip" data-filter="اتصالات">اتصالات</button>
+            <button class="chip" data-filter="حياة رقمية">حياة رقمية</button>
+            <button class="chip" data-filter="نصائح">نصائح</button>
+          </div>
+        </div>
+
+        <div class="grid posts-grid" id="posts">
+          <!-- بطاقة 1 -->
+          <article class="card post" data-category="اتصالات" data-title="ما هو الجيل السادس 6G؟">
+            <div class="cover"></div>
+            <div class="content">
+              <span class="badge">اتصالات</span>
+              <h3>ما هو الجيل السادس (6G)؟</h3>
+              <p class="muted">نظرة عامة على رؤية 6G، حالات الاستخدام المتقدمة، وكيف ستؤثر على قطاعات مثل الصحة والنقل.</p>
+              <footer>
+                <small class="muted">5 دقائق قراءة</small>
+                <a class="btn ghost" href="#" aria-label="اقرأ المزيد عن الجيل السادس">اقرأ المزيد</a>
+              </footer>
+            </div>
+          </article>
+
+          <!-- بطاقة 2 -->
+          <article class="card post" data-category="حياة رقمية" data-title="التوازن الرقمي">
+            <div class="cover"></div>
+            <div class="content">
+              <span class="badge">حياة رقمية</span>
+              <h3>كيف تحافظ على توازن صحي مع التقنية؟</h3>
+              <p class="muted">استراتيجيات عملية لإدارة الوقت على الهاتف والتواصل الاجتماعي دون إفراط.</p>
+              <footer>
+                <small class="muted">4 دقائق قراءة</small>
+                <a class="btn ghost" href="#">اقرأ المزيد</a>
+              </footer>
+            </div>
+          </article>
+
+          <!-- بطاقة 3 -->
+          <article class="card post" data-category="نصائح" data-title="أمان الواي فاي">
+            <div class="cover"></div>
+            <div class="content">
+              <span class="badge">نصائح</span>
+              <h3>10 نصائح لحماية شبكتك المنزلية</h3>
+              <p class="muted">من تغيير كلمة المرور الافتراضية إلى تحديث الراوتر وتمكين تشفير WPA3.</p>
+              <footer>
+                <small class="muted">6 دقائق قراءة</small>
+                <a class="btn ghost" href="#">اقرأ المزيد</a>
+              </footer>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== حول ====== -->
+    <section id="about" class="about">
+      <div class="container">
+        <h2>عن المدونة</h2>
+        <p class="muted">نهدف إلى تبسيط عالم الاتصالات والحياة الرقمية لكل المستخدمين العرب من خلال مقالات موثوقة، نصائح عملية، ومحتوى سهل القراءة.</p>
+        <div class="grid cards">
+          <div class="card">
+            <h3>رسالتنا</h3>
+            <p>نشر الوعي الرقمي وتعزيز الاستخدام المسؤول للتقنيات الحديثة.</p>
+          </div>
+          <div class="card">
+            <h3>قيمنا</h3>
+            <p>الشفافية، الدقة، واحترام خصوصية القارئ.</p>
+          </div>
+          <div class="card">
+            <h3>لمن هذه المدونة؟</h3>
+            <p>لكل من يهتم بفهم التكنولوجيا بلغة بسيطة: طلاب، محترفون، وأولياء أمور.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== نشرة بريدية ====== -->
+    <section id="newsletter">
+      <div class="container">
+        <div class="card" style="padding:1.25rem; display:grid; gap:.8rem; align-items:center; grid-template-columns: 1.2fr .8fr;">
+          <div>
+            <h2 style="margin:.3rem 0">اشترك في النشرة البريدية</h2>
+            <p class="muted">آخر المقالات والنصائح تصل إلى بريدك مرة أسبوعيًا.</p>
+          </div>
+          <form id="newsletterForm" aria-label="نموذج الاشتراك بالبريد">
+            <label for="email" class="sr-only">البريد الإلكتروني</label>
+            <input id="email" name="email" type="email" placeholder="name@example.com" required />
+            <button class="btn" type="submit" aria-label="اشتراك">اشتراك</button>
+            <small class="muted">بالاشتراك، أنت توافق على <a href="#terms">الشروط</a> و <a href="#privacy">سياسة الخصوصية</a>.</small>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== اتصل بنا ====== -->
+    <section id="contact">
+      <div class="container">
+        <h2>اتصل بنا</h2>
+        <form id="contactForm">
+          <div>
+            <label for="name">الاسم</label>
+            <input id="name" name="name" required />
+          </div>
+          <div>
+            <label for="cemail">البريد الإلكتروني</label>
+            <input id="cemail" name="email" type="email" required />
+          </div>
+          <div>
+            <label for="msg">رسالتك</label>
+            <textarea id="msg" name="message" rows="5" required></textarea>
+          </div>
+          <button class="btn" type="submit">إرسال</button>
+          <p id="contactStatus" class="muted" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ====== الشروط والأحكام ====== -->
+    <section id="terms" class="legal" aria-labelledby="terms-title">
+      <div class="container panel">
+        <h2 id="terms-title">الشروط والأحكام</h2>
+        <p class="muted">آخر تحديث: <time datetime="2025-08-16">16 أغسطس 2025</time></p>
+
+        <div class="note" role="note">يُرجى قراءة هذه الشروط بعناية قبل استخدام الموقع. باستخدامك المدونة فإنك تقر بقبولك لهذه الشروط كاملة.</div>
+
+        <h3>1) التعريفات</h3>
+        <ul>
+          <li>"المدونة" أو "الموقع": منصتنا الإلكترونية "الاتصالات والحياة".</li>
+          <li>"المستخدم": أي شخص يزور أو يستخدم الموقع أو يتفاعل مع محتواه.</li>
+          <li>"المحتوى": المقالات، النصوص، الصور، الرسوم، وأي مواد منشورة.</li>
+        </ul>
+
+        <h3>2) طبيعة المحتوى</h3>
+        <p>المحتوى لأغراض معلوماتية/تثقيفية عامة ولا يُعد نصيحة تقنية أو مهنية. يتحمل المستخدم مسؤولية أي قرار يتخذه استنادًا إلى المحتوى.</p>
+
+        <h3>3) حقوق الملكية الفكرية</h3>
+        <p>جميع حقوق النشر والعلامات والشعارات والتصاميم مملوكة للمدونة أو للجهات المرخِّصة. يُحظر النسخ أو الاقتباس أو إعادة النشر دون موافقة خطية مسبقة، باستثناء الاستخدام العادل غير التجاري مع ذكر المصدر.</p>
+
+        <h3>4) استخدام مقبول</h3>
+        <ul>
+          <li>عدم إساءة استخدام الموقع أو محاولة الوصول غير المصرح به.</li>
+          <li>الامتناع عن نشر تعليقات مسيئة أو مخالفة للقانون أو لحقوق الآخرين.</li>
+          <li>عدم إرسال رسائل عشوائية/إعلانية عبر نماذج الاتصال.</li>
+        </ul>
+
+        <h3>5) التعليقات والمساهمات</h3>
+        <p>قد نقوم بإدارة أو تعديل أو إزالة أي تعليق أو مساهمة تخالف هذه الشروط أو القوانين المطبقة، دون التزام بإشعار مسبق.</p>
+
+        <h3>6) الروابط الخارجية</h3>
+        <p>قد يحتوي الموقع على روابط لمواقع خارجية لا نتحكم فيها. لسنا مسؤولين عن محتواها أو ممارساتها.</p>
+
+        <h3>7) عدم الضمان وحدود المسؤولية</h3>
+        <p>يُقدَّم الموقع "كما هو" دون أي ضمانات صريحة أو ضمنية. لا نتحمل أي مسؤولية عن خسائر مباشرة أو غير مباشرة ناتجة عن استخدام الموقع أو الاعتماد على المحتوى.</p>
+
+        <h3>8) التعديلات على الشروط</h3>
+        <p>يجوز لنا تعديل هذه الشروط في أي وقت. يُعد استمرار استخدامك بعد نشر التعديلات قبولًا لها. يُنصح بمراجعة الصفحة دوريًا.</p>
+
+        <h3>9) القانون والاختصاص</h3>
+        <p>تخضع هذه الشروط للقوانين المطبّقة في بلد/منطقة تشغيل الموقع. وأي نزاع يُحال إلى المحاكم المختصة وفقًا لتلك القوانين.</p>
+
+        <h3>10) التواصل</h3>
+        <p>للاستفسارات حول هذه الشروط: <a href="mailto:contact@example.com">contact@example.com</a></p>
+      </div>
+    </section>
+
+    <!-- ====== سياسة الخصوصية ====== -->
+    <section id="privacy" class="legal" aria-labelledby="privacy-title">
+      <div class="container panel">
+        <h2 id="privacy-title">سياسة الخصوصية</h2>
+        <p class="muted">آخر تحديث: <time datetime="2025-08-16">16 أغسطس 2025</time></p>
+
+        <div class="note">تحترم المدونة خصوصيتك. تشرح هذه السياسة أنواع البيانات التي نجمعها وكيف نستخدمها ونحميها وحقوقك تجاهها.</div>
+
+        <h3>1) البيانات التي نجمعها</h3>
+        <ul>
+          <li><strong>بيانات يقدمها المستخدم</strong>: مثل الاسم والبريد الإلكتروني عند الاشتراك أو التواصل.</li>
+          <li><strong>بيانات استخدام</strong>: معلومات تقنية عامة مثل نوع المتصفح وصفحات الزيارة (مجمّعة/غير مُعرِّفة للشخص).</li>
+          <li><strong>ملفات تعريف الارتباط (Cookies)</strong>: لتحسين التجربة وتذكر تفضيلاتك.</li>
+        </ul>
+
+        <h3>2) كيف نستخدم البيانات</h3>
+        <ul>
+          <li>إرسال تحديثات النشرة البريدية والمحتوى الجديد (بعد موافقتك).</li>
+          <li>الرد على الاستفسارات وتحسين تجربة المستخدم وأمان الموقع.</li>
+          <li>الامتثال للالتزامات القانونية وحماية حقوقنا وحقوق المستخدمين.</li>
+        </ul>
+
+        <h3>3) مشاركة البيانات</h3>
+        <p>لا نبيع بياناتك الشخصية. قد نشارك بياناتًا محدودة مع مزودي خدمات موثوقين (مثل منصات البريد) لمعالجة الاشتراكات، وفق اتفاقيات سرية ومعايير أمان مناسبة، أو إذا طُلب قانونًا.</p>
+
+        <h3>4) الاحتفاظ والحماية</h3>
+        <p>نحتفظ بالبيانات للمدة اللازمة للأغراض المذكورة ثم نحذفها أو نُجهِّلها. نطبق إجراءات أمنية معقولة لحمايتها من الوصول غير المصرح به.</p>
+
+        <h3>5) حقوقك</h3>
+        <ul>
+          <li>الاطلاع على بياناتك وتصحيحها أو طلب حذفها.</li>
+          <li>سحب الموافقة على الرسائل التسويقية في أي وقت.</li>
+          <li>الاعتراض على معالجة معينة حيثما يتيح القانون ذلك.</li>
+        </ul>
+
+        <h3>6) ملفات تعريف الارتباط</h3>
+        <p>يمكنك إدارة/رفض ملفات الكوكيز من إعدادات المتصفح. يؤدي تعطيلها إلى الحد من بعض الميزات.</p>
+
+        <h3>7) خصوصية الأطفال</h3>
+        <p>الموقع موجه للجمهور العام وغير مخصص للأطفال دون 13 عامًا. لا نجمع عن قصد بياناتهم. إذا اعتقدت ذلك، راسلنا للحذف.</p>
+
+        <h3>8) النقل الدولي للبيانات</h3>
+        <p>قد تُعالَج البيانات على خوادم خارج بلدك مع ضمانات قانونية مناسبة.</p>
+
+        <h3>9) التغييرات على السياسة</h3>
+        <p>قد نحدث هذه السياسة من وقت لآخر. سننشر نسخة محدثة مع تاريخ "آخر تحديث" في الأعلى.</p>
+
+        <h3>10) التواصل</h3>
+        <p>لأي استفسار خصوصية: <a href="mailto:privacy@example.com">privacy@example.com</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <small>© <span id="year"></span> الاتصالات والحياة — جميع الحقوق محفوظة.</small>
+      <div style="display:flex; gap:.7rem;">
+        <a href="#terms">الشروط</a>
+        <span aria-hidden="true">•</span>
+        <a href="#privacy">الخصوصية</a>
+        <span aria-hidden="true">•</span>
+        <a href="#contact">اتصل بنا</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- إشعار ملفات تعريف الارتباط -->
+  <div class="cookie" id="cookieBar" role="region" aria-label="إشعار ملفات تعريف الارتباط">
+    <div class="container row">
+      <p>نستخدم ملفات تعريف الارتباط لتحسين تجربتك. بالمتابعة، أنت توافق على <a href="#privacy">سياسة الخصوصية</a>.</p>
+      <div style="display:flex; gap:.5rem;">
+        <button class="btn" id="acceptCookies">موافق</button>
+        <a class="btn ghost" href="#privacy">المزيد</a>
+      </div>
+    </div>
+  </div>
+
+  <button id="toTop" class="btn" aria-label="الرجوع للأعلى">⬆︎</button>
+
+  <script>
+    // ====== سمة الموقع (فاتح/داكن) ======
+    (function() {
+      const key = 'theme-preference';
+      const root = document.documentElement;
+      const saved = localStorage.getItem(key);
+      if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+      document.getElementById('themeToggle').addEventListener('click', () => {
+        const current = root.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : current === 'light' ? 'system' : 'dark';
+        root.setAttribute('data-theme', next);
+        if (next === 'system') localStorage.removeItem(key); else localStorage.setItem(key, next);
+        const labelMap = { light: 'الوضع الفاتح', dark: 'الوضع الداكن', system: 'افتراضي النظام' };
+        document.getElementById('themeToggle').setAttribute('aria-label', 'تبديل السمة: ' + labelMap[next]);
+      });
+    })();
+
+    // ====== القائمة على الجوال ======
+    (function(){
+      const btn = document.getElementById('menuBtn');
+      const nav = document.getElementById('mobileNav');
+      btn.addEventListener('click', () => {
+        const open = nav.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      nav.querySelectorAll('a').forEach(a => a.addEventListener('click',() => {
+        nav.classList.remove('open'); btn.setAttribute('aria-expanded','false');
+      }));
+    })();
+
+    // ====== السنة في التذييل ======
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ====== بحث وتصفية المقالات ======
+    (function(){
+      const search = document.getElementById('search');
+      const chips = Array.from(document.querySelectorAll('.chip'));
+      const cards = Array.from(document.querySelectorAll('.post'));
+      let active = 'all';
+      function apply(){
+        const q = (search.value || '').trim().toLowerCase();
+        cards.forEach(card => {
+          const cat = card.dataset.category;
+          const title = (card.dataset.title || card.querySelector('h3').textContent).toLowerCase();
+          const matchCat = (active === 'all') || (cat === active);
+          const matchText = !q || title.includes(q);
+          card.style.display = (matchCat && matchText) ? '' : 'none';
+        });
+      }
+      search.addEventListener('input', apply);
+      chips.forEach(ch => ch.addEventListener('click', ()=>{
+        chips.forEach(c => c.classList.remove('active'));
+        ch.classList.add('active');
+        active = ch.dataset.filter;
+        apply();
+      }));
+    })();
+
+    // ====== نموذج النشرة البريدية (محلي) ======
+    document.getElementById('newsletterForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('رجاءً أدخل بريدًا صحيحًا.'); return; }
+      localStorage.setItem('newsletter-email', email);
+      e.target.reset();
+      alert('شكرًا لاشتراكك!');
+    });
+
+    // ====== نموذج اتصل بنا (محلي) ======
+    document.getElementById('contactForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const status = document.getElementById('contactStatus');
+      status.textContent = 'تم استلام رسالتك! سنعود إليك قريبًا.';
+      e.target.reset();
+    });
+
+    // ====== شريط الكوكيز ======
+    (function(){
+      const bar = document.getElementById('cookieBar');
+      if (!localStorage.getItem('cookies-accepted')) {
+        bar.style.display = 'block';
+      }
+      document.getElementById('acceptCookies').addEventListener('click', () => {
+        localStorage.setItem('cookies-accepted', 'yes');
+        bar.style.display = 'none';
+      });
+    })();
+
+    // ====== زر لأعلى ======
+    (function(){
+      const btn = document.getElementById('toTop');
+      window.addEventListener('scroll', () => {
+        btn.style.display = window.scrollY > 400 ? 'inline-flex' : 'none';
+      });
+      btn.addEventListener('click', () => { window.scrollTo({ top:0, behavior:'smooth' }); });
+    })();
+  </script>
+</body>
 </html>
